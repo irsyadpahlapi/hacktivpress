@@ -1,17 +1,18 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const Userschema = new Schema({
+const Artikelschema = new Schema({
   title: String,
   content: String,
   category: String,
   thumbnail: String,
+  categori: String,
   author: {
     type: Schema.Types.ObjectId,
     ref: 'User'
   }
 },{timestamps:true})
 
-const User = mongoose.model('User',Userschema)
+const Artikel = mongoose.model('Artikel',Artikelschema)
 
-module.exports = User;
+module.exports = Artikel;
