@@ -2,9 +2,13 @@
   <div class="">
     <nav class="navbar navbar-expand-lg navbar-light bg-dark  justify-content-end">
       <div class="row">
-        <div class="col-md-2 col-xs-12">
-          <button type="button" v-show="!token" class="btn btn-light" data-toggle="modal" data-target="#exampleModal">Register</button>
-          <button type="button" v-show="token" class="btn btn-light" @click="logout">Logout</button>
+        <div class="col-md-6">
+          <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal">Register</button>
+        </div>
+        <div class="col-md-2">
+          <router-link :to="{ name: 'Login'}">
+            <button type="button" class="btn btn-light">Login</button>
+          </router-link>
         </div>
       </div>
     </nav>
@@ -19,12 +23,8 @@
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label for="inputname">Full Name</label>
-              <input type="text" class="form-control" id="inputname" v-model="fullname" placeholder="Enter Full Name">
-            </div>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail1" v-model="email" aria-describedby="emailHelp" placeholder="Enter email">
+              <label for="inputname">Username</label>
+              <input type="text" class="form-control" id="inputname" v-model="username" placeholder="Enter your username">
             </div>
             <div class="form-group">
               <label for="exampleInputPassword1">Password</label>
@@ -33,7 +33,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="register">Save changes</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="register">Register</button>
           </div>
         </div>
       </div>
@@ -42,7 +42,29 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import axios from 'axios'
 export default {
+  data () {
+    return {
+      username: '',
+      password: ''
+    }
+  },
+  methods:{
+    register () {
+      axios.post('http://localhost:3000/users/signup',{
+        username: this.username,
+        password: this.password
+      }).then(response => {
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('id', response.data.id)
+        this.$router.push('/')
+      })
+    }
+  },
+  computed: mapState([
+    'token'])
 }
 </script>
 
